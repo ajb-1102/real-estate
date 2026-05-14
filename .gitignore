@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+*.db
+.browser_data/
+*.egg-info/
+.env

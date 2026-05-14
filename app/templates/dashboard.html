@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metrica — Real Estate Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <!-- ─── Header ─────────────────────────────────────── -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand">
+        <h1 class="brand-name">Metrica</h1>
+        <span class="brand-tag">Real Estate Intelligence</span>
+      </div>
+      <div class="header-actions">
+        <div class="stats-bar">
+          <div class="stat" id="stat-total"><span class="stat-val">—</span><span class="stat-label">Total</span></div>
+          <div class="stat" id="stat-saved"><span class="stat-val">—</span><span class="stat-label">Saved</span></div>
+        </div>
+        <div class="refresh-group">
+          <span class="last-refresh" id="last-refresh">—</span>
+          <button class="btn btn-refresh" id="btn-refresh" onclick="triggerRefresh()">
+            <svg class="icon-spin" id="refresh-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+            Refresh
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── Section Tabs ───────────────────────────────── -->
+  <nav class="tabs-bar">
+    <div class="tabs-inner">
+      {% for sec in sections %}
+      <button class="tab{% if loop.first %} active{% endif %}"
+              data-section="{{ sec.id }}"
+              onclick="switchSection('{{ sec.id }}', this)">
+        <span class="tab-title">{{ sec.title }}</span>
+        <span class="tab-sub">{{ sec.subtitle }}</span>
+        <span class="tab-count" id="tab-count-{{ sec.id }}"></span>
+      </button>
+      {% endfor %}
+    </div>
+  </nav>
+
+  <!-- ─── Main Content ───────────────────────────────── -->
+  <main class="main">
+    <!-- Status filter -->
+    <div class="toolbar">
+      <div class="filter-pills">
+        <button class="pill active" data-filter="active" onclick="setFilter('active', this)">Active</button>
+        <button class="pill" data-filter="saved" onclick="setFilter('saved', this)">Saved</button>
+        <button class="pill" data-filter="not_interested" onclick="setFilter('not_interested', this)">Hidden</button>
+        <button class="pill" data-filter="all" onclick="setFilter('all', this)">All</button>
+      </div>
+      <div class="section-total" id="section-total"></div>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <p>Loading listings…</p>
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty-state" id="empty-state" style="display:none">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <p>No listings found for this section.</p>
+      <p class="empty-hint">Try refreshing data or switching filters.</p>
+    </div>
+
+    <!-- City groups container -->
+    <div id="listings-container"></div>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
